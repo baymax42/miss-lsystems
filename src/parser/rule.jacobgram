@@ -1,0 +1,123 @@
+%moduleName lsystemRuleParser
+
+%left '+' '-'
+%left '*' '/'
+%right '^'
+
+Start = Statement ':' [Predicate] 'ARROW' {Body}
+                                            function (v, _, _, _, body) {
+                                              this.create = new Function(
+                                                ...this.params,
+                                                `return [${body}].map((v => v(...[${this.params}]))).join('')`
+                                              )
+                                              return v
+                                            };
+
+Statement = 'TOKEN' '(' Parameters ')'
+                                            function (id, _, _, _) {
+                                              // we add parameters at front, so we need to reverse it
+                                              this.params.reverse()
+                                              return id
+                                            };
+
+Parameters = 'VAR' ',' Parameters
+                                            function (param) {
+                                              this.params.push(param)
+                                            }
+           | 'VAR'
+                                            function (param) {
+                                              this.params.push(param)
+                                            };
+
+Predicate = Expression 'NEQ' Expression
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} !== ${e2}`
+                                              )
+                                            }
+          | Expression 'GTE' Expression
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} >= ${e2}`
+                                              )
+                                            }
+          | Expression 'LTE' Expression
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} <= ${e2}`
+                                              )
+                                            }
+          | Expression '>' Expression
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} > ${e2}`
+                                              )
+                                            }
+          | Expression '<' Expression
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} < ${e2}`
+                                              )
+                                            }
+
+          | Expression '=' Expression
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} === ${e2}`
+                                              )
+                                            };
+
+
+Expression = Expression '^' Expression
+                                            function (e1, _, e2) {
+                                              return `Math.pow(${e1}, ${e2})`
+                                            }
+           | Expression '+' Expression
+                                            function (e1, _, e2) {
+                                              return `${e1} + ${e2}`
+                                            }
+           | Expression '-' Expression
+                                            function (e1, _, e2) {
+                                              return `${e1} - ${e2}`
+                                            }
+           | Expression '*' Expression
+                                            function (e1, _, e2) {
+                                              return `${e1} * ${e2}`
+                                            }
+           | Expression '/' Expression
+                                            function (e1, _, e2) {
+                                              return `${e1} / ${e2}`
+                                            }
+           | '(' Expression ')'
+                                            function (_, e1) {
+                                              return `(${e1})`
+                                            }
+           | '-' Expression
+                                            function (_, e1) {
+                                              return `(-${e1})`
+                                            }
+           | ('NUMBER' | 'VAR')
+                                            function (v) { return v };
+
+Body = 'TOKEN' '(' ExpParameter ')'
+                                            function (id, _, params) {
+                                              return new Function(
+                                                ...this.params,
+                                                `return '${id}(' + ${params} + ')'`
+                                              )
+                                            };
+
+ExpParameter = Expression ',' ExpParameter
+                                            function (exp, _, parameters) {
+                                              return `Number(${exp})+','+${parameters}`
+                                            }
+             | Expression
+                                            function (exp) {
+                                              return `Number(${exp})`
+                                            };

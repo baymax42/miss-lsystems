@@ -1,0 +1,101 @@
+%moduleName lsystemRule
+
+%%
+
+var = [a-z]
+token = [A-Z\+\-f]
+digits = [0-9]
+
+operators = [\+\-\*\/\^]
+
+%%
+
+<>: {
+  this.pushState('PREDICATE')
+  return ':'
+}
+
+<>{token} { return 'TOKEN' }
+
+<>{var}   { return 'VAR' }
+
+<>\s*     { }
+
+<>.       { return this.jjtext }
+
+<>$       { return 'EOF' }
+
+
+
+<PREDICATE>{var} { return 'VAR' }
+
+<PREDICATE>{digits}*\.{digits}+ {
+  this.jjval = parseFloat(this.jjtext)
+  return 'NUMBER'
+}
+
+<PREDICATE>{digits}+ {
+  this.jjval = parseInt(this.jjtext)
+  return 'NUMBER'
+}
+
+<PREDICATE>-> {
+  this.popState()
+  this.pushState('BODY')
+  return 'ARROW'
+}
+
+<PREDICATE>>= { return 'GTE' }
+
+<PREDICATE><= { return 'LTE' }
+
+<PREDICATE>!= { return 'NEQ' }
+
+<PREDICATE>\s*  { }
+
+<PREDICATE>.    { return this.jjtext }
+
+
+
+<BODY>\( {
+  this.count = 0
+  this.pushState('EXPR')
+  return '('
+}
+
+<BODY>{token} { return 'TOKEN' }
+
+<BODY>\s*     { }
+
+<BODY>.       { return this.jjtext }
+
+
+<EXPR>\( {
+  this.count++
+  return '('
+}
+
+<EXPR>\) {
+  if (this.count === 0) {
+    this.popState()
+  } else {
+    this.count--
+  }
+  return ')'
+}
+
+<EXPR>{var} { return 'VAR' }
+
+<EXPR>{digits}*\.{digits}+ {
+  this.jjval = parseFloat(this.jjtext)
+  return 'NUMBER'
+}
+
+<EXPR>{digits}+ {
+  this.jjval = parseInt(this.jjtext)
+  return 'NUMBER'
+}
+
+<EXPR>\s* { }
+
+<EXPR>.   { return this.jjtext }

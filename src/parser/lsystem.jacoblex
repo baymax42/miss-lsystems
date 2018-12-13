@@ -1,0 +1,56 @@
+%moduleName lsystem
+
+%%
+
+nonparam = [\[\]]
+param = [A-Z\+\-]
+digits = [0-9]
+
+%%
+
+<>{param}     { return 'PARAM' }
+
+<>{nonparam}  { return 'NONPARAM' }
+
+<>\w+         { return 'ID' }
+
+<>\s*         { }
+
+<>$           { return 'EOF' }
+
+<>\(          {
+  this.pushState('EXPR')
+  this.count = 0
+  return '('
+}
+
+<>.           { return this.jjtext }
+
+
+<EXPR>\( {
+  this.count++
+  return '('
+}
+
+<EXPR>\) {
+  if (this.count === 0) {
+    this.popState()
+  } else {
+    this.count--
+  }
+  return ')'
+}
+
+<EXPR>{digits}*\.{digits}+ {
+  this.jjval = parseFloat(this.jjtext)
+  return 'NUMBER'
+}
+
+<EXPR>{digits}+ {
+  this.jjval = parseInt(this.jjtext)
+  return 'NUMBER'
+}
+
+<EXPR>\s* { }
+
+<EXPR>.   { return this.jjtext }
