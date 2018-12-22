@@ -6,8 +6,12 @@ import lsystem from './parser'
 
 Vue.config.productionTip = false
 
-let tRules = lsystem.transformRules(['F(x, y) : (2+2)^3!=10 -> F(x + 5, y ^ 2)F(y, x)'])
-let out = lsystem.evolve('F(1, 2)', tRules, 2)
+let tRules = lsystem.transformRules([
+  'F(x, a) : x = 0 -> F(0, a)',
+  'F(x, a) : x > 0 -> F(x - 1, x * a)'
+])
+
+let out = lsystem.evolve('F(5, 1)F(6, 1)', tRules, 5)
 console.log(out)
 
 /* eslint-disable no-new */

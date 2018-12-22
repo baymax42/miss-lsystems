@@ -6,12 +6,13 @@ env=modules=imports=environment;
 this.action={"0":{"0":["reduce",[2,0,5]],"4":["reduce",[2,0,5]],"8":["reduce",[2,0,5]]},"1":{"0":["accept",[]]},"2":{"0":["reduce",[1,1,0]],"4":["shift",[4]],"8":["shift",[5]]},"3":{"0":["reduce",[2,2,6]],"4":["reduce",[2,2,6]],"8":["reduce",[2,2,6]]},"4":{"5":["shift",[6]]},"5":{"0":["reduce",[3,1,2]],"4":["reduce",[3,1,2]],"8":["reduce",[3,1,2]]},"6":{"9":["shift",[8]]},"7":{"7":["shift",[9]]},"8":{"7":["reduce",[6,1,4]],"10":["shift",[10]]},"9":{"0":["reduce",[3,4,1]],"4":["reduce",[3,4,1]],"8":["reduce",[3,4,1]]},"10":{"9":["shift",[8]]},"11":{"7":["reduce",[6,3,3]]}};
 this.goto={"0":{"1":1,"2":2},"2":{"3":3},"6":{"6":7},"10":{"6":11}};
 this.actions=[function (productions) {
-                                              return productions.join('')
+                                              return this.assemble(productions)
                                             },function (id, _, parameters, _) {
                                               // we add parameters at front, so we need to reverse it
                                               this.params.reverse()
                                               for (rule of this[id]) {
-                                                if (rule.params.length === this.params.length && rule.check(...this.params)) {
+                                                console.log(rule)
+                                                if (rule.params.length === this.params.length && (!rule.check || rule.check(...this.params))) {
                                                   let retVal = rule.create(...this.params)
                                                   this.params = []
                                                   return retVal

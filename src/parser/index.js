@@ -1,3 +1,5 @@
+import conversion from '../interpretations'
+
 const RuleLexer = require('./rule.jacoblex.out')
 const RuleParser = require('./rule.jacobgram.out')
 const SystemLexer = require('./lsystem.jacoblex.out')
@@ -28,7 +30,7 @@ const systemParser = new SystemParser()
 //  if found token meets conditions: check function and number of parameters.
 //
 //  Similar context is used to transform result of parsing
-//  to more computer friendly format used by drawing system.
+//  to more computer friendly format used by drawing engine.
 //
 
 // Parse one rule string and return object with actions for given token
@@ -59,9 +61,7 @@ function transformRules (rules) {
     }
     parserContext[result[0]].push(result[1])
   }
-  parserContext.assemble = (array) => {
-    return array.join('')
-  }
+  parserContext.assemble = (array) => array.join('')
   return parserContext
 }
 
@@ -80,8 +80,7 @@ function evolve (axiom, transformedRules, iterations) {
     console.log(system)
     system = iterateSystem(system, transformedRules)
   }
-  console.log(system)
-  return system
+  return iterateSystem(system, conversion.conversionContext(transformedRules))
 }
 
 export default {

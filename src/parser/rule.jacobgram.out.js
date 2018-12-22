@@ -71,7 +71,6 @@ this.actions=[function (v, _, _, _, body) {
                                             },function (exp, _, parameters) {
                                               return `Number(${exp})+','+${parameters}`
                                             },function (exp) {
-                                              console.log(exp)
                                               return `Number(${exp})`
                                             },function () {
                 return undefined;

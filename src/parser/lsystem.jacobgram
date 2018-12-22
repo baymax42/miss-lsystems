@@ -2,7 +2,7 @@
 
 Start = {Statement}
                                             function (productions) {
-                                              return productions.join('')
+                                              return this.assemble(productions)
                                             };
 
 Statement = 'PARAM' '(' Parameters ')'
@@ -10,7 +10,8 @@ Statement = 'PARAM' '(' Parameters ')'
                                               // we add parameters at front, so we need to reverse it
                                               this.params.reverse()
                                               for (rule of this[id]) {
-                                                if (rule.params.length === this.params.length && rule.check(...this.params)) {
+                                                console.log(rule)
+                                                if (rule.params.length === this.params.length && (!rule.check || rule.check(...this.params))) {
                                                   let retVal = rule.create(...this.params)
                                                   this.params = []
                                                   return retVal
