@@ -3,11 +3,39 @@
 // Definition of default actions with default options
 // Functions here must accept variable amount of parameters
 const DEFAULT_ACTIONS = {
-  'FORWARD': (...args) => {
+  'DRAW': (...args) => {
     return [
-      'FORWARD', {
-        'length': args[0] || 100,
-        'width': args[1] || 100
+      'DRAW', {
+        'length': args[0] || 10,
+        'width': args[1] || 1
+      }
+    ]
+  },
+  'MOVE': (...args) => {
+    return [
+      'MOVE', {
+        'length': args[0] || 10
+      }
+    ]
+  },
+  'ROTX': (...args) => {
+    return [
+      'ROTX', {
+        'angle': args[0] || 0
+      }
+    ]
+  },
+  'ROTY': (...args) => {
+    return [
+      'ROTY', {
+        'angle': args[0] || 0
+      }
+    ]
+  },
+  'ROTZ': (...args) => {
+    return [
+      'ROTZ', {
+        'angle': args[0] || 0
       }
     ]
   }
@@ -16,7 +44,11 @@ const DEFAULT_ACTIONS = {
 // Default grammar with corresponding interpretation
 // This is object is need to properly transform l-system
 const DEFAULT_GRAMMAR = {
-  'F': 'FORWARD'
+  'F': 'DRAW',
+  'f': 'MOVE',
+  '+': 'ROTZ',
+  '&': 'ROTY',
+  '\\': 'ROTX'
 }
 
 // Create the conversion context in format like transformedRules
