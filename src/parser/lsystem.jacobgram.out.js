@@ -3,8 +3,8 @@ function Parser(environment){
 if(!(this instanceof Parser)) return new Parser(environment);
 var env,modules,imports;
 env=modules=imports=environment;
-this.action={"0":{"0":["reduce",[2,0,5]],"4":["reduce",[2,0,5]],"8":["reduce",[2,0,5]]},"1":{"0":["accept",[]]},"2":{"0":["reduce",[1,1,0]],"4":["shift",[4]],"8":["shift",[5]]},"3":{"0":["reduce",[2,2,6]],"4":["reduce",[2,2,6]],"8":["reduce",[2,2,6]]},"4":{"5":["shift",[6]]},"5":{"0":["reduce",[3,1,2]],"4":["reduce",[3,1,2]],"8":["reduce",[3,1,2]]},"6":{"9":["shift",[8]]},"7":{"7":["shift",[9]]},"8":{"7":["reduce",[6,1,4]],"10":["shift",[10]]},"9":{"0":["reduce",[3,4,1]],"4":["reduce",[3,4,1]],"8":["reduce",[3,4,1]]},"10":{"9":["shift",[8]]},"11":{"7":["reduce",[6,3,3]]}};
-this.goto={"0":{"1":1,"2":2},"2":{"3":3},"6":{"6":7},"10":{"6":11}};
+this.action={"0":{"0":["reduce",[2,0,7]],"4":["reduce",[2,0,7]],"8":["reduce",[2,0,7]]},"1":{"0":["accept",[]]},"2":{"0":["reduce",[1,1,0]],"4":["shift",[4]],"8":["shift",[5]]},"3":{"0":["reduce",[2,2,8]],"4":["reduce",[2,2,8]],"8":["reduce",[2,2,8]]},"4":{"5":["shift",[6]]},"5":{"0":["reduce",[3,1,2]],"4":["reduce",[3,1,2]],"8":["reduce",[3,1,2]]},"6":{"11":["shift",[9]],"12":["shift",[10]]},"7":{"7":["shift",[11]]},"8":{"7":["reduce",[6,1,4]],"10":["shift",[12]]},"9":{"12":["shift",[13]]},"10":{"7":["reduce",[9,1,6]],"10":["reduce",[9,1,6]]},"11":{"0":["reduce",[3,4,1]],"4":["reduce",[3,4,1]],"8":["reduce",[3,4,1]]},"12":{"11":["shift",[9]],"12":["shift",[10]]},"13":{"7":["reduce",[9,2,5]],"10":["reduce",[9,2,5]]},"14":{"7":["reduce",[6,3,3]]}};
+this.goto={"0":{"1":1,"2":2},"2":{"3":3},"6":{"6":7,"9":8},"12":{"6":14,"9":8}};
 this.actions=[function (productions) {
                                               return this.assemble(productions)
                                             },function (id, _, parameters, _) {
@@ -27,14 +27,18 @@ this.actions=[function (productions) {
                                               this.params.push(param)
                                               return `${param},${parameters}`
                                             },function (param) {
-                                            console.log(this.params)
+                                              console.log(this.params)
                                               this.params.push(param)
                                               return param
+                                            },function (_, param) {
+                                              return -param
+                                            },function (param) {
+                                              return param;
                                             },function(){return [];},function(){
                 return arguments[0].concat(Array.prototype.slice.call(arguments,1));
             }];
 this.startstate=0;
-this.symbolsTable={"<<EOF>>":0,"Start":1,"Repeat_0_0":2,"Statement":3,"PARAM":4,"(":5,"Parameters":6,")":7,"NONPARAM":8,"NUMBER":9,",":10};
+this.symbolsTable={"<<EOF>>":0,"Start":1,"Repeat_0_0":2,"Statement":3,"PARAM":4,"(":5,"Parameters":6,")":7,"NONPARAM":8,"Real":9,",":10,"-":11,"NUMBER":12};
 this.actionMode='function';
 }
 Parser.prototype.identity=function (x) {

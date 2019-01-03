@@ -25,15 +25,24 @@ Statement = 'PARAM' '(' Parameters ')'
                                               return id
                                             };
 
-Parameters = 'NUMBER' ',' Parameters
+Parameters = Real ',' Parameters
                                             function (param, _, parameters) {
                                               console.log(this.params);
                                               this.params.push(param)
                                               return `${param},${parameters}`
                                             }
-           | 'NUMBER'
+
+           | Real
                                             function (param) {
-                                            console.log(this.params)
+                                              console.log(this.params)
                                               this.params.push(param)
                                               return param
+                                            };
+Real = '-' 'NUMBER'
+                                            function (_, param) {
+                                              return -param
+                                            }
+     | 'NUMBER'
+                                            function (param) {
+                                              return param;
                                             };
