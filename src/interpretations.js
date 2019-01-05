@@ -38,6 +38,16 @@ const DEFAULT_ACTIONS = {
         'angle': args[0] || 0
       }
     ]
+  },
+  'PUSH': () => {
+    return [
+      'PUSH', {}
+    ]
+  },
+  'POP': () => {
+    return [
+      'POP', {}
+    ]
   }
 }
 
@@ -48,7 +58,9 @@ const DEFAULT_GRAMMAR = {
   'f': 'MOVE',
   '+': 'ROTZ',
   '&': 'ROTY',
-  '\\': 'ROTX'
+  '/': 'ROTX',
+  '[': 'PUSH',
+  ']': 'POP'
 }
 
 // Create the conversion context in format like transformedRules
@@ -56,7 +68,7 @@ const DEFAULT_GRAMMAR = {
 function conversionContext (transformedRules, grammar = DEFAULT_GRAMMAR, actions = DEFAULT_ACTIONS) {
   let context = {}
   context.params = null
-  for (let prop in transformedRules) {
+  for (let prop in grammar) {
     if (transformedRules[prop] instanceof Array) {
       context[prop] = []
       for (let rule of transformedRules[prop]) {
@@ -66,9 +78,29 @@ function conversionContext (transformedRules, grammar = DEFAULT_GRAMMAR, actions
           check: () => true
         })
       }
+    } else {
+      context[prop] = [{
+        params: [],
+        create: actions[grammar[prop]],
+        check: () => true
+      }]
     }
   }
-  context.assemble = (array) => array
+  for (let prop in transformedRules) {
+    if (transformedRules[prop] instanceof Array) {
+      if (context[prop] == null) {
+        context[prop] = []
+        for (let rule of transformedRules[prop]) {
+          context[prop].push({
+            params: rule.params,
+            create: () => null,
+            check: () => true
+          })
+        }
+      }
+    }
+  }
+  context.assemble = (array) => array.filter(v => !!v)
   return context
 }
 
