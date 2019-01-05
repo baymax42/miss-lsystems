@@ -3,7 +3,7 @@
 %%
 
 var = [a-z]
-token = [A-Z\+\-f]
+token = [A-Z\+f/&\[\]]
 digits = [0-9]
 
 operators = [\+\-\*\/\^]
@@ -15,9 +15,9 @@ operators = [\+\-\*\/\^]
   return ':'
 }
 
-<>{token} { return 'TOKEN' }
-
 <>{var}   { return 'VAR' }
+
+<>{token} { return 'TOKEN' }
 
 <>\s*     { }
 

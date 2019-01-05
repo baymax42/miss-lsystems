@@ -3,7 +3,7 @@
 %%
 
 nonparam = [\[\]]
-param = [A-Z\+\-]
+param = [A-Z\+f&/]
 digits = [0-9]
 
 %%

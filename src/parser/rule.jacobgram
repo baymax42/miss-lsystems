@@ -111,6 +111,13 @@ Body = 'TOKEN' '(' ExpParameter ')'
                                                 ...this.params,
                                                 `return '${id}(' + ${params} + ')'`
                                               )
+                                            }
+     | 'TOKEN'
+                                            function (id) {
+                                              return new Function(
+                                                [],
+                                                `return '${id}'`
+                                              )
                                             };
 
 ExpParameter = Expression ',' ExpParameter

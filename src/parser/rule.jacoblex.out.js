@@ -29,7 +29,7 @@ return t;};
 function CDFA_DEFAULT(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6,7,8];
-	this.tt=[null,3,4,3,3,1,0,2,1];
+	this.tt=[null,3,4,3,3,2,0,1,1];
 this.stt={};
 }
 CDFA_DEFAULT.prototype= new CDFA_base();
@@ -37,20 +37,20 @@ CDFA_DEFAULT.prototype.nextState = function(state, c){
     var next = 0;
     switch(state){
 case 1:
-if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "+" || "+" < c)  && (c < "-" || "-" < c)  && (c < ":" || ":" < c)  && (c < "A" || "Z" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
+if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "&" || "&" < c)  && (c < "+" || "+" < c)  && (c < "/" || "/" < c)  && (c < ":" || ":" < c)  && (c < "A" || "[" < c)  && (c < "]" || "]" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
 next = 2;
 } else if(("\t" === c ) || (" " === c ) || (" " === c )){
 next = 3;
 } else if(("\n" === c ) || ("\r" === c )){
 next = 3;
-} else if(("+" === c ) || ("-" === c ) || ("A" <= c && c <= "Z") ){
+} else if(("&" === c ) || ("+" === c ) || ("/" === c ) || ("A" <= c && c <= "[")  || ("]" === c )){
 next = 5;
 } else if((":" === c )){
 next = 6;
 } else if(("a" <= c && c <= "e")  || ("g" <= c && c <= "z") ){
 next = 7;
 } else if(("f" === c )){
-next = 5;
+next = 7;
 }
 break;
 case 3:
@@ -149,7 +149,7 @@ break;
 function CDFA_BODY(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6];
-	this.tt=[null,17,18,17,17,15,16];
+	this.tt=[null,17,18,17,17,16,15];
 this.stt={};
 }
 CDFA_BODY.prototype= new CDFA_base();
@@ -157,15 +157,15 @@ CDFA_BODY.prototype.nextState = function(state, c){
     var next = 0;
     switch(state){
 case 1:
-if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "(" || "(" < c)  && (c < "+" || "+" < c)  && (c < "-" || "-" < c)  && (c < "A" || "Z" < c)  && (c < "f" || "f" < c)  && (c < " " || " " < c) ){
+if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "&" || "&" < c)  && (c < "(" || "(" < c)  && (c < "+" || "+" < c)  && (c < "/" || "/" < c)  && (c < "A" || "[" < c)  && (c < "]" || "]" < c)  && (c < "f" || "f" < c)  && (c < " " || " " < c) ){
 next = 2;
 } else if(("\t" === c ) || (" " === c ) || (" " === c )){
 next = 3;
 } else if(("\n" === c ) || ("\r" === c )){
 next = 3;
-} else if(("(" === c )){
+} else if(("&" === c ) || ("+" === c ) || ("/" === c ) || ("A" <= c && c <= "[")  || ("]" === c ) || ("f" === c )){
 next = 5;
-} else if(("+" === c ) || ("-" === c ) || ("A" <= c && c <= "Z")  || ("f" === c )){
+} else if(("(" === c )){
 next = 6;
 }
 break;
@@ -256,10 +256,10 @@ this.actions = [function anonymous(
 
 },function anonymous(
 ) {
- return 'TOKEN' 
+ return 'VAR' 
 },function anonymous(
 ) {
- return 'VAR' 
+ return 'TOKEN' 
 },function anonymous(
 ) {
  

@@ -29,7 +29,7 @@ return t;};
 function CDFA_DEFAULT(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6,7,8,9,10];
-	this.tt=[null,3,6,3,3,5,0,2,0,1,2];
+	this.tt=[null,3,6,3,3,0,5,2,0,1,2];
 this.stt={};
 }
 CDFA_DEFAULT.prototype= new CDFA_base();
@@ -37,19 +37,19 @@ CDFA_DEFAULT.prototype.nextState = function(state, c){
     var next = 0;
     switch(state){
 case 1:
-if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "(" || "(" < c)  && (c < "+" || "+" < c)  && (c < "-" || "-" < c)  && (c < "0" || "9" < c)  && (c < "A" || "[" < c)  && (c < "]" || "]" < c)  && (c < "_" || "_" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
+if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "&" || "&" < c)  && (c < "(" || "(" < c)  && (c < "+" || "+" < c)  && (c < "/" || "9" < c)  && (c < "A" || "[" < c)  && (c < "]" || "]" < c)  && (c < "_" || "_" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
 next = 2;
 } else if(("\t" === c ) || (" " === c ) || (" " === c )){
 next = 3;
 } else if(("\n" === c ) || ("\r" === c )){
 next = 3;
-} else if(("(" === c )){
+} else if(("&" === c ) || ("+" === c ) || ("/" === c )){
 next = 5;
-} else if(("+" === c ) || ("-" === c )){
+} else if(("(" === c )){
 next = 6;
-} else if(("0" <= c && c <= "9")  || ("_" === c ) || ("a" <= c && c <= "z") ){
+} else if(("0" <= c && c <= "9")  || ("_" === c ) || ("a" <= c && c <= "e")  || ("g" <= c && c <= "z") ){
 next = 7;
-} else if(("A" <= c && c <= "Z") ){
+} else if(("A" <= c && c <= "Z")  || ("f" === c )){
 next = 8;
 } else if(("[" === c ) || ("]" === c )){
 next = 9;
