@@ -4,6 +4,7 @@
             <v-content>
                 <div class='menu--content' :class="isClosed ? 'closed' : ''">
                     <div @click="isClosed = !isClosed" class="menu--button">
+                        <v-icon medium>{{setIcon}}</v-icon>
                     </div>
                     <v-layout class="scroll">
                         <v-flex>
@@ -131,6 +132,13 @@
           return true
         }
         return false
+      },
+      setIcon: function () {
+        if (this.isClosed) {
+          return 'keyboard_arrow_right'
+        } else {
+          return 'keyboard_arrow_left'
+        }
       }
     },
     methods: {
@@ -220,6 +228,9 @@
         height: 100%;
         background: lightgrey;
         border-left: 8px double #2e2e2e;
+        justify-content: center;
+        align-items: center;
+        display: flex;
     }
 
     .height {
