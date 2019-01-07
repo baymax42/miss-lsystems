@@ -10,6 +10,11 @@ operators = [\+\-\*\/\^]
 
 %%
 
+<>-> {
+  this.pushState('BODY')
+  return 'ARROW'
+}
+
 <>: {
   this.pushState('PREDICATE')
   return ':'

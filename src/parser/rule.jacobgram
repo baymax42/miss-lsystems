@@ -4,8 +4,8 @@
 %left '*' '/'
 %right '^'
 
-Start = Statement ':' [Predicate] 'ARROW' {Body}
-                                            function (v, _, _, _, body) {
+Start = Statement [':' Predicate] 'ARROW' {Body}
+                                            function (v, _, _, body) {
                                               this.create = new Function(
                                                 ...this.params,
                                                 `return [${body}].map((v => v(...[${this.params}]))).join('')`

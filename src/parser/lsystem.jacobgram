@@ -35,6 +35,7 @@ Parameters = Real ',' Parameters
                                               return `${param},${parameters}`
                                             }
 
+
            | Real
                                             function (param) {
                                               this.params.push(param)

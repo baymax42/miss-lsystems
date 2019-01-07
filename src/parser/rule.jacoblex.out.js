@@ -28,8 +28,8 @@ return t;};
 
 function CDFA_DEFAULT(){
 	this.ss=1;
-	this.as=[1,2,3,4,5,6,7,8];
-	this.tt=[null,3,4,3,3,2,0,1,1];
+	this.as=[1,2,3,4,5,6,7,8,9,10];
+	this.tt=[null,4,5,4,4,3,5,1,2,2,0];
 this.stt={};
 }
 CDFA_DEFAULT.prototype= new CDFA_base();
@@ -37,7 +37,7 @@ CDFA_DEFAULT.prototype.nextState = function(state, c){
     var next = 0;
     switch(state){
 case 1:
-if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "&" || "&" < c)  && (c < "+" || "+" < c)  && (c < "/" || "/" < c)  && (c < ":" || ":" < c)  && (c < "A" || "[" < c)  && (c < "]" || "]" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
+if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || " " < c)  && (c < "&" || "&" < c)  && (c < "+" || "+" < c)  && (c < "-" || "-" < c)  && (c < "/" || "/" < c)  && (c < ":" || ":" < c)  && (c < "A" || "[" < c)  && (c < "]" || "]" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
 next = 2;
 } else if(("\t" === c ) || (" " === c ) || (" " === c )){
 next = 3;
@@ -45,17 +45,24 @@ next = 3;
 next = 3;
 } else if(("&" === c ) || ("+" === c ) || ("/" === c ) || ("A" <= c && c <= "[")  || ("]" === c )){
 next = 5;
-} else if((":" === c )){
+} else if(("-" === c )){
 next = 6;
+} else if((":" === c )){
+next = 7;
 } else if(("a" <= c && c <= "e")  || ("g" <= c && c <= "z") ){
-next = 7;
+next = 8;
 } else if(("f" === c )){
-next = 7;
+next = 8;
 }
 break;
 case 3:
 if(("\t" <= c && c <= "\n")  || ("\r" === c ) || (" " === c ) || (" " === c )){
 next = 3;
+}
+break;
+case 6:
+if((">" === c )){
+next = 10;
 }
 break;
 	}
@@ -65,7 +72,7 @@ break;
 function CDFA_PREDICATE(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18];
-	this.tt=[null,13,14,13,13,14,14,14,8,14,14,6,12,9,7,null,8,11,10];
+	this.tt=[null,14,15,14,14,15,15,15,9,15,15,7,13,10,8,null,9,12,11];
 this.stt={};
 }
 CDFA_PREDICATE.prototype= new CDFA_base();
@@ -149,7 +156,7 @@ break;
 function CDFA_BODY(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6];
-	this.tt=[null,17,18,17,17,16,15];
+	this.tt=[null,18,19,18,18,17,16];
 this.stt={};
 }
 CDFA_BODY.prototype= new CDFA_base();
@@ -181,7 +188,7 @@ break;
 function CDFA_EXPR(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6,7,8,9,10,12];
-	this.tt=[null,24,25,24,24,19,20,25,23,21,22,null,23];
+	this.tt=[null,25,26,25,25,20,21,26,24,22,23,null,24];
 this.stt={};
 }
 CDFA_EXPR.prototype= new CDFA_base();
@@ -249,6 +256,12 @@ this.states={};
 this.state = ['DEFAULT'];
 this.lastChar = '\n';
 this.actions = [function anonymous(
+) {
+
+  this.pushState('BODY')
+  return 'ARROW'
+
+},function anonymous(
 ) {
 
   this.pushState('PREDICATE')

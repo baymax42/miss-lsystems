@@ -9,7 +9,7 @@
             <v-flex>
               <div class="list--title">PRESETS</div>
               <v-list class="background--color">
-                <v-list-tile-content v-for="system in presets" :key="system">
+                <v-list-tile-content v-for="system in presets" :key="system.name">
                   <v-btn
                     dark
                     flat
@@ -103,10 +103,10 @@
             axiom: 'A(5)',
             rulesAmount: 4,
             rules: [
-              'A(x) : -> F(x)[+(45)/(45)A(x)][+(45)/(-45)A(x)][+(-45)/(45)A(x)]+(-45)/(-45)A(x)',
-              '+(x) : -> +(x)',
-              '/(x) : -> /(x)',
-              'F(x) : -> F(2*x)'
+              'A(x) -> F(x)[+(45)/(45)A(x)][+(45)/(-45)A(x)][+(-45)/(45)A(x)]+(-45)/(-45)A(x)',
+              '+(x) -> +(x)',
+              '/(x) -> /(x)',
+              'F(x) -> F(2*x)'
             ],
             steps: 4
           },

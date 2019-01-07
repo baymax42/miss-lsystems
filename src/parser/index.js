@@ -62,6 +62,7 @@ function transformRules (rules) {
     parserContext[result[0]].push(result[1])
   }
   parserContext.assemble = (array) => array.join('')
+  window.tmp = parserContext
   return parserContext
 }
 
