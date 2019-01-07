@@ -100,7 +100,7 @@
         isClosed: true,
         presets: [
           {
-            name: 'system 1',
+            name: '3d pitagorian tree',
             axiom: 'A(5)',
             rulesAmount: 4,
             rules: [
@@ -109,10 +109,33 @@
               '/(x) : -> /(x)',
               'F(x) : -> F(2*x)'
             ],
-            steps: 4
+            steps: 5
           },
-          { name: 'system 2', axiom: '', rulesAmount: 0, rules: ['x'], steps: 4 },
-          { name: 'system 3', axiom: '', rulesAmount: 0, rules: ['x'], steps: 4 }
+          {
+            name: 'simple leaf',
+            axiom: 'A(0)',
+            rulesAmount: 5,
+            rules: [
+              'A(x) : x>0 -> A(x-1)',
+              'A(x) : x=0 -> F(1)[+(30)/(10)A(0)][+(-30)/(10)A(0)]F(1)A(0)',
+              'F(a) : -> /(-0.7)F(a*2)',
+              '+(x) :-> +(x)',
+              '/(x) : -> /(x)'
+            ],
+            steps: 6
+          },
+          {
+            name: 'other plant',
+            axiom: 'A(2)',
+            rulesAmount: 4,
+            rules: [
+              'A(x) : -> F(x)+(25)/(10)[[A(x)]+(-25)/(-30)A(x)]+(-25)/(5)F(x)[+(-25)/(-5)F(x)A(x)]+(25)/(-20)A(x)',
+              'F(x) : -> F(x)F(x)',
+              '+(x) : -> +(x)',
+              '/(x) : -> /(x)'
+            ],
+            steps: 5
+          }
         ],
         advancedOptions: false,
         rulesAmount: 0,
@@ -245,6 +268,7 @@
     .list--element {
         width: 100%;
         margin: 0;
+        height: 45px;
     }
 
     .list--title {
@@ -254,6 +278,7 @@
         margin: 20px;
         letter-spacing: 2px;
         color: lightgrey;
+        margin-top: 30px;
     }
 
     .background--color {
@@ -277,6 +302,7 @@
         height: 50px;
         justify-content: center;
     }
+
     .scroll {
         overflow-y: auto;
     }
