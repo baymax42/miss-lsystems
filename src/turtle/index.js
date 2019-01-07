@@ -4,7 +4,7 @@ class Turtle {
   constructor () {
     this.stack = []
     this.lineWidth = 1
-    this.position = new THREE.Vector3(0, 0, 0)
+    this.position = [0, 0, 0]
     this.rotX = 0
     this.rotY = 0
     this.rotZ = 0
@@ -24,19 +24,30 @@ class Turtle {
 
   drawTo (length, width) {
     let material = new THREE.LineBasicMaterial({
-      color: 0x0000ff,
+      color: 0x1565C0,
       linewidth: width,
     })
-    let geometry = new THREE.Geometry()
-    geometry.vertices.push(new THREE.Vector3(0, 0, 0))
-    geometry.vertices.push(new THREE.Vector3(0, length, 0))
+    let geometry = new THREE.BufferGeometry()
+    let vertices = new Float32Array([
+      0, 0, 0,
+      0, length, 0
+    ])
+
+    geometry.addAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
     geometry.rotateX(this.rotX)
     geometry.rotateY(this.rotY)
     geometry.rotateZ(this.rotZ)
-    geometry.translate(this.position.x, this.position.y, this.position.z)
+    geometry.translate(this.position[0], this.position[1], this.position[2])
+    geometry.computeBoundingSphere()
+
     let line = new THREE.Line(geometry, material)
     this.lines.push(line)
-    this.position = line.geometry.vertices[1].clone()
+    this.position = [
+      line.geometry.attributes.position.array[3],
+      line.geometry.attributes.position.array[4],
+      line.geometry.attributes.position.array[5]
+    ]
+
   }
 
   rotateX (angle) {
@@ -54,7 +65,7 @@ class Turtle {
   pushState () {
     this.stack.push({
       lineWidth: this.lineWidth,
-      position: this.position.clone(),
+      position: this.position,
       rotX: this.rotX,
       rotY: this.rotY,
       rotZ: this.rotZ
@@ -70,6 +81,7 @@ class Turtle {
     this.rotZ = state.rotZ
   }
 }
+
 
 function drawSystem (actions) {
   let turtle = new Turtle()

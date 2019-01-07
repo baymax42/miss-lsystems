@@ -41,8 +41,8 @@
                                         class="advanced--inputs"
                                         type='text'
                                         :rules="[
-                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
-                  ]"
+                                            v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
+                                        ]"
                                         v-model="simulationSteps">
                                 </v-text-field>
                                 <v-text-field
@@ -51,8 +51,8 @@
                                         class="advanced--inputs"
                                         type='text'
                                         :rules="[
-                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
-                  ]"
+                                            v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
+                                        ]"
                                         v-model="rulesAmount">
                                 </v-text-field>
                                 <v-text-field
@@ -63,21 +63,23 @@
                                         class="advanced--inputs"
                                         v-model="rules[rule - 1]">
                                 </v-text-field>
-                                <span class="mx-auto">
-                  <v-btn
-                          large
-                          @click="clearForm"
-                          class="draw--button">
-                      CLEAR
-                  </v-btn>
-                  <v-btn
-                          large
-                          :disabled="!isValid"
-                          @click="drawSystem"
-                          class="draw--button">
-                      DRAW
-                  </v-btn>
-                </span>
+                                <div class="px-3 d-flex">
+                                    <v-btn
+                                            large
+                                            @click="clearForm"
+                                            class="draw--button"
+                                    >
+                                        CLEAR
+                                    </v-btn>
+                                    <v-btn
+                                            large
+                                            :disabled="!isValid"
+                                            @click="drawSystem"
+                                            class="draw--button"
+                                    >
+                                        DRAW
+                                    </v-btn>
+                                </div>
                             </div>
                         </v-flex>
                     </v-layout>
@@ -129,13 +131,14 @@
         error: {},
         scene: null,
         isClosed: true,
+        helper: null,
         presets: [
           {
             name: '3d pitagorian tree',
             axiom: 'A(5)',
             rules: [
               'A(x) -> F(x, 1)[+(45)/(30)A(x)][+(45)/(-30)A(x)][+(-45)/(30)A(x)]+(-45)/(-30)A(x)',
-              'F(x, y) -> F(2^(1/2)*x, y + 1)'
+              'F(x, y) -> F(1.707*x, y + 1)'
             ],
             steps: 5
           },
@@ -144,8 +147,8 @@
             axiom: 'A(0)',
             rules: [
               'A(x) : x>0 -> A(x-1)',
-              'A(x) : x=0 -> F(1)[+(30)/(10)A(0)][+(-30)/(10)A(0)]F(1)A(0)',
-              'F(a) -> /(-0.7)F(a*2)'
+              'A(x) : x=0 -> F(1, 1)[+(30)/(10)A(0)][+(-30)/(10)A(0)]F(1, 1)A(0)',
+              'F(a, b) -> /(-0.7)F(a*2, b + 0.5)'
             ],
             steps: 6
           },
@@ -208,7 +211,7 @@
         this.drawSystem()
       },
       drawSystem () {
-        this.createGrid()
+        this.addGrid()
         let rules = []
         for (let i = 0; i < this.rulesAmount; i++) {
           rules[i] = this.rules[i]
@@ -222,22 +225,22 @@
           this.handleError(e)
         }
       },
-      createGrid () {
+      addGrid () {
         while (this.scene.children.length > 0) {
+          this.scene.children[0].geometry.dispose()
           this.scene.remove(this.scene.children[0])
         }
-        var helper = new THREE.GridHelper(2000, 100)
-        helper.position.y = 0
-        helper.material.opacity = 0.25
-        helper.material.transparent = true
-        this.scene.add(helper)
+        this.helper.position.y = 0
+        this.helper.material.opacity = 0.25
+        this.helper.material.transparent = true
+        this.scene.add(this.helper)
       },
       clearForm () {
         this.axiom = ''
         this.rulesAmount = 0
         this.simulationSteps = 0
         this.rules = []
-        this.createGrid()
+        this.addGrid()
       }
     },
     mounted () {
@@ -252,7 +255,8 @@
       canvas.id = 'canvas'
       document.getElementById('canvas').replaceWith(canvas)
       new OrbitControls(camera, document.getElementById('canvas'))
-      this.createGrid()
+      this.helper = new THREE.GridHelper(2000, 100)
+      this.addGrid()
 
       let animate = function () {
         requestAnimationFrame(animate)
@@ -347,6 +351,7 @@
         width: 130px;
         height: 50px;
         justify-content: center;
+        align-content: center;
     }
 
     .scroll {
