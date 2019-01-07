@@ -125,7 +125,7 @@
     name: 'App',
     data () {
       return {
-        dialog: true,
+        dialog: false,
         error: {},
         scene: null,
         isClosed: true,
@@ -134,8 +134,8 @@
             name: 'system 1',
             axiom: 'A(5)',
             rules: [
-              'A(x) -> F(x)[+(45)/(30)A(x)][+(45)/(-30)A(x)][+(-45)/(30)A(x)]+(-45)/(-30)A(x)',
-              'F(x) -> F(2^(1/2)*x)'
+              'A(x) -> F(x, 1)[+(45)/(30)A(x)][+(45)/(-30)A(x)][+(-45)/(30)A(x)]+(-45)/(-30)A(x)',
+              'F(x, y) -> F(2^(1/2)*x, y + 1)'
             ],
             steps: 4
           },
@@ -192,6 +192,7 @@
         try {
           rules = lsystem.transformRules(rules)
           let out = lsystem.evolve(this.axiom, rules, this.simulationSteps)
+          console.log(out)
           tur.drawSystem(out).forEach(v => this.scene.add(v))
         } catch (e) {
           this.handleError(e)

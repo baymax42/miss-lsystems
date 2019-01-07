@@ -9,7 +9,6 @@ class Turtle {
     this.rotY = 0
     this.rotZ = 0
     this.lines = []
-    // additional params
   }
 
   moveTo (length) {
@@ -23,8 +22,11 @@ class Turtle {
     this.position = line.geometry.vertices[1].clone()
   }
 
-  drawTo (length) {
-    let material = new THREE.LineBasicMaterial({color: 0x0000ff})
+  drawTo (length, width) {
+    let material = new THREE.LineBasicMaterial({
+      color: 0x0000ff,
+      linewidth: width,
+    })
     let geometry = new THREE.Geometry()
     geometry.vertices.push(new THREE.Vector3(0, 0, 0))
     geometry.vertices.push(new THREE.Vector3(0, length, 0))
@@ -73,7 +75,7 @@ function drawSystem (actions) {
   let turtle = new Turtle()
   for (let action of actions) {
     if (action[0] === 'DRAW') {
-      turtle.drawTo(action[1].length)
+      turtle.drawTo(action[1].length, action[1].width)
     } else if (action[0] === 'MOVE') {
       turtle.moveTo(action[1].length)
     } else if (action[0] === 'ROTX') {
