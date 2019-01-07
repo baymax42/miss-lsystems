@@ -4,77 +4,77 @@
             <v-content>
                 <div class='menu--content' :class="isClosed ? 'closed' : ''">
                     <div @click="isClosed = !isClosed" class="menu--button">
+                        <v-icon medium>{{setIcon}}</v-icon>
                     </div>
-                    <v-layout class="scroll">
-                        <v-flex>
-                            <div class="list--title">PRESETS</div>
-                            <v-list class="background--color">
-                                <v-list-tile-content v-for="system in presets" :key="system.name">
-                                    <v-btn
-                                            dark
-                                            flat
-                                            large
-                                            @click="drawPreset(system.name)"
-                                            class="list--element">
-                                        {{system.name}}
-                                    </v-btn>
-                                </v-list-tile-content>
-                            </v-list>
-                            <v-switch
-                                    dark
-                                    color="#1565C0"
-                                    v-model="advancedOptions"
-                                    label="Advanced Options"
-                                    class="mode--switch">
-                            </v-switch>
-                            <div v-if="advancedOptions">
-                                <v-text-field
-                                        dark
-                                        label="Axiom"
-                                        v-model="axiom"
-                                        class="advanced--inputs">
-                                </v-text-field>
-                                <v-text-field
-                                        dark
-                                        label="Number of simulation steps"
-                                        class="advanced--inputs"
-                                        type='text'
-                                        :rules="[
-                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
-                  ]"
-                                        v-model="simulationSteps">
-                                </v-text-field>
-                                <v-text-field
-                                        dark
-                                        label="Number of rules"
-                                        class="advanced--inputs"
-                                        type='text'
-                                        :rules="[
-                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
-                  ]"
-                                        v-model="rulesAmount">
-                                </v-text-field>
-                                <v-text-field
-                                        dark
-                                        v-for="rule in Number(rulesAmount)"
-                                        :key="rule"
-                                        label="Rule"
-                                        class="advanced--inputs"
-                                        v-model="rules[rule - 1]"
-                                >
-                                </v-text-field>
-                                <span class="mx-auto">
+          <v-layout class="scroll">
+            <v-flex>
+              <div class="list--title">PRESETS</div>
+              <v-list class="background--color">
+                <v-list-tile-content v-for="system in presets" :key="system">
                   <v-btn
-                          large
-                          @click="clearForm"
-                          class="draw--button">
+                    dark
+                    flat
+                    large
+                    @click="drawPreset(system.name)"
+                    class="list--element">
+                    {{system.name}}
+                  </v-btn>
+                </v-list-tile-content>
+              </v-list>
+              <v-switch
+                dark
+                color="#1565C0"
+                v-model="advancedOptions"
+                label="Advanced Options"
+                class="mode--switch">
+              </v-switch>
+              <div v-if="advancedOptions">
+                <v-text-field
+                  dark
+                  label="Axiom"
+                  v-model="axiom"
+                  class="advanced--inputs">
+                </v-text-field>
+                <v-text-field
+                  dark
+                  label="Number of simulation steps"
+                  class="advanced--inputs"
+                  type='text'
+                  :rules="[
+                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
+                  ]"
+                  v-model="simulationSteps">
+                </v-text-field>
+                <v-text-field
+                  dark
+                  label="Number of rules"
+                  class="advanced--inputs"
+                  type='text'
+                  :rules="[
+                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
+                  ]"
+                  v-model="rulesAmount">
+                </v-text-field>
+                <v-text-field
+                  dark
+                  v-for="rule in Number(rulesAmount)"
+                  :key="rule"
+                  label="Rule"
+                  class="advanced--inputs"
+                  v-model="rules[rule - 1]">
+                </v-text-field>
+                <span class="mx-auto">
+                  <v-btn
+                    large
+                    @click="clearForm"
+                    class="draw--button">
                       CLEAR
                   </v-btn>
                   <v-btn
-                          large
-                          :disabled="!isValid"
-                          @click="drawSystem"
-                          class="draw--button">
+                    large
+                    :disabled="!isValid"
+                    @click="drawSystem"
+                    class="draw--button">
                       DRAW
                   </v-btn>
                 </span>
@@ -131,16 +131,39 @@
         isClosed: true,
         presets: [
           {
-            name: 'system 1',
+            name: '3d pitagorian tree',
             axiom: 'A(5)',
             rules: [
               'A(x) -> F(x, 1)[+(45)/(30)A(x)][+(45)/(-30)A(x)][+(-45)/(30)A(x)]+(-45)/(-30)A(x)',
               'F(x, y) -> F(2^(1/2)*x, y + 1)'
             ],
-            steps: 4
+            steps: 5
           },
-          {name: 'system 2', axiom: '', rules: ['x'], steps: 4},
-          {name: 'system 3', axiom: '', rules: ['x'], steps: 4}
+          {
+            name: 'simple leaf',
+            axiom: 'A(0)',
+            rulesAmount: 5,
+            rules: [
+              'A(x) : x>0 -> A(x-1)',
+              'A(x) : x=0 -> F(1)[+(30)/(10)A(0)][+(-30)/(10)A(0)]F(1)A(0)',
+              'F(a) : -> /(-0.7)F(a*2)',
+              '+(x) :-> +(x)',
+              '/(x) : -> /(x)'
+            ],
+            steps: 6
+          },
+          {
+            name: 'other plant',
+            axiom: 'A(2)',
+            rulesAmount: 4,
+            rules: [
+              'A(x) : -> F(x)+(25)/(10)[[A(x)]+(-25)/(-30)A(x)]+(-25)/(5)F(x)[+(-25)/(-5)F(x)A(x)]+(25)/(-20)A(x)',
+              'F(x) : -> F(x)F(x)',
+              '+(x) : -> +(x)',
+              '/(x) : -> /(x)'
+            ],
+            steps: 5
+          }
         ],
         advancedOptions: false,
         rulesAmount: 0,
@@ -160,6 +183,13 @@
           return true
         }
         return false
+      },
+      setIcon: function () {
+        if (this.isClosed) {
+          return 'keyboard_arrow_right'
+        } else {
+          return 'keyboard_arrow_left'
+        }
       }
     },
     methods: {
@@ -273,6 +303,9 @@
         height: 100%;
         background: lightgrey;
         border-left: 8px double #2e2e2e;
+        justify-content: center;
+        align-items: center;
+        display: flex;
     }
 
     .height {
@@ -287,15 +320,16 @@
     .list--element {
         width: 100%;
         margin: 0;
+        height: 45px;
     }
 
     .list--title {
         text-align: center;
         font-size: 1.4rem;
         font-weight: bold;
-        margin: 20px;
         letter-spacing: 2px;
         color: lightgrey;
+        margin: 30px 20px 20px;
     }
 
     .background--color {
