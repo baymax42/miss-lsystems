@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import Vuetify from 'vuetify'
-import lsystem from './parser'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.config.productionTip = false
