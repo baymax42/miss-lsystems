@@ -68,7 +68,10 @@ const DEFAULT_GRAMMAR = {
 function conversionContext (transformedRules, grammar = DEFAULT_GRAMMAR, actions = DEFAULT_ACTIONS) {
   let context = {}
   context.params = null
+  // iterate through registered tokens
+  // that is every token with defined action
   for (let prop in grammar) {
+    // if there is explicit rule then use it
     if (transformedRules[prop] instanceof Array) {
       context[prop] = []
       for (let rule of transformedRules[prop]) {
@@ -79,28 +82,20 @@ function conversionContext (transformedRules, grammar = DEFAULT_GRAMMAR, actions
         })
       }
     } else {
+      // if there is not explicit rule for registered token
+      // create default rule in form: +(x, y) -> x(x, y)
+      // where x, y are defined in actions
       context[prop] = [{
-        params: [],
+        params: Object.keys(actions[grammar[prop]]()[1]),
         create: actions[grammar[prop]],
         check: () => true
       }]
     }
   }
-  for (let prop in transformedRules) {
-    if (transformedRules[prop] instanceof Array) {
-      if (context[prop] == null) {
-        context[prop] = []
-        for (let rule of transformedRules[prop]) {
-          context[prop].push({
-            params: rule.params,
-            create: () => null,
-            check: () => true
-          })
-        }
-      }
-    }
-  }
+  // filter out nulls - user-defined rules for tokens without actions
   context.assemble = (array) => array.filter(v => !!v)
+  // by default ignore any other tokens - do not assign any action to it
+  context.defaultCreate = () => null
   return context
 }
 

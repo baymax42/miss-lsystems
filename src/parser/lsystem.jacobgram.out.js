@@ -10,15 +10,18 @@ this.actions=[function (productions) {
                                             },function (id, _, parameters, _) {
                                               // we add parameters at front, so we need to reverse it
                                               this.params.reverse()
-                                              for (rule of this[id]) {
-                                                if (rule.params.length === this.params.length && (!rule.check || rule.check(...this.params))) {
-                                                  let retVal = rule.create(...this.params)
-                                                  this.params = []
-                                                  return retVal
+                                              if (this[id]) {
+                                                for (rule of this[id]) {
+                                                  if (rule.params.length === this.params.length && (!rule.check || rule.check(...this.params))) {
+                                                    let retVal = rule.create(...this.params)
+                                                    this.params = []
+                                                    return retVal
+                                                  }
                                                 }
                                               }
+                                              let result = this.defaultCreate(id, this.params)
                                               this.params = []
-                                              return `${id}(${parameters})`
+                                              return result
                                             },function (id) {
                                               if (this[id]) {
                                                 let retVal = this[id][0].create()

@@ -101,11 +101,10 @@
           {
             name: 'system 1',
             axiom: 'A(5)',
-            rulesAmount: 4,
+            rulesAmount: 3,
             rules: [
               'A(x) -> F(x)[+(45)/(45)A(x)][+(45)/(-45)A(x)][+(-45)/(45)A(x)]+(-45)/(-45)A(x)',
               '+(x) -> +(x)',
-              '/(x) -> /(x)',
               'F(x) -> F(2*x)'
             ],
             steps: 4
