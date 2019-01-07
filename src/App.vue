@@ -6,85 +6,85 @@
                     <div @click="isClosed = !isClosed" class="menu--button">
                         <v-icon medium>{{setIcon}}</v-icon>
                     </div>
-                    <v-layout class="scroll">
-                        <v-flex>
-                            <div class="list--title">PRESETS</div>
-                            <v-list class="background--color">
-                                <v-list-tile-content v-for="system in presets" :key="system">
-                                    <v-btn
-                                            dark
-                                            flat
-                                            large
-                                            @click="drawPreset(system.name)"
-                                            class="list--element">
-                                        {{system.name}}
-                                    </v-btn>
-                                </v-list-tile-content>
-                            </v-list>
-                            <v-switch
-                                    dark
-                                    color="#1565C0"
-                                    v-model="advancedOptions"
-                                    label="Advanced Options"
-                                    class="mode--switch">
-                            </v-switch>
-                            <div v-if="advancedOptions">
-                                <v-text-field
-                                        dark
-                                        label="Axiom"
-                                        v-model="axiom"
-                                        class="advanced--inputs">
-                                </v-text-field>
-                                <v-text-field
-                                        dark
-                                        label="Number of simulation steps"
-                                        class="advanced--inputs"
-                                        type='text'
-                                        :rules="[
-                                            v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
-                                        ]"
-                                        v-model="simulationSteps">
-                                </v-text-field>
-                                <v-text-field
-                                        dark
-                                        label="Number of rules"
-                                        class="advanced--inputs"
-                                        type='text'
-                                        :rules="[
-                                            v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
-                                        ]"
-                                        v-model="rulesAmount">
-                                </v-text-field>
-                                <v-text-field
-                                        dark
-                                        v-for="rule in Number(rulesAmount)"
-                                        :key="rule"
-                                        label="Rule"
-                                        class="advanced--inputs"
-                                        v-model="rules[rule - 1]">
-                                </v-text-field>
-                                <span class="mx-auto">
-                                    <v-btn
-                                            large
-                                            @click="clearForm"
-                                            class="draw--button">
-                                        CLEAR
-                                    </v-btn>
-                                    <v-btn
-                                            large
-                                            :disabled="!isValid"
-                                            @click="drawSystem"
-                                            class="draw--button">
-                                        DRAW
-                                    </v-btn>
-                                </span>
-                            </div>
-                        </v-flex>
-                    </v-layout>
-                </div>
-            </v-content>
-        </v-container>
-    </v-app>
+          <v-layout class="scroll">
+            <v-flex>
+              <div class="list--title">PRESETS</div>
+              <v-list class="background--color">
+                <v-list-tile-content v-for="system in presets" :key="system">
+                  <v-btn
+                    dark
+                    flat
+                    large
+                    @click="drawPreset(system.name)"
+                    class="list--element">
+                    {{system.name}}
+                  </v-btn>
+                </v-list-tile-content>
+              </v-list>
+              <v-switch
+                dark
+                color="#1565C0"
+                v-model="advancedOptions"
+                label="Advanced Options"
+                class="mode--switch">
+              </v-switch>
+              <div v-if="advancedOptions">
+                <v-text-field
+                  dark
+                  label="Axiom"
+                  v-model="axiom"
+                  class="advanced--inputs">
+                </v-text-field>
+                <v-text-field
+                  dark
+                  label="Number of simulation steps"
+                  class="advanced--inputs"
+                  type='text'
+                  :rules="[
+                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
+                  ]"
+                  v-model="simulationSteps">
+                </v-text-field>
+                <v-text-field
+                  dark
+                  label="Number of rules"
+                  class="advanced--inputs"
+                  type='text'
+                  :rules="[
+                      v => (!!Number(v) && v >= 0) || 'Value must be a number non-negative integer.'
+                  ]"
+                  v-model="rulesAmount">
+                </v-text-field>
+                <v-text-field
+                  dark
+                  v-for="rule in Number(rulesAmount)"
+                  :key="rule"
+                  label="Rule"
+                  class="advanced--inputs"
+                  v-model="rules[rule - 1]">
+                </v-text-field>
+                <span class="mx-auto">
+                  <v-btn
+                    large
+                    @click="clearForm"
+                    class="draw--button">
+                      CLEAR
+                  </v-btn>
+                  <v-btn
+                    large
+                    :disabled="!isValid"
+                    @click="drawSystem"
+                    class="draw--button">
+                      DRAW
+                  </v-btn>
+                </span>
+              </div>
+            </v-flex>
+          </v-layout>
+        </div>
+      </v-content>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -203,19 +203,19 @@
     },
     mounted () {
       this.scene = new THREE.Scene()
-      console.log(this.scene, this)
-      var OrbitControls = require('three-orbit-controls')(THREE)
+      let OrbitControls = require('three-orbit-controls')(THREE)
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
       camera.position.set(0, 0, 100)
       camera.lookAt(0, 0, 0)
       const renderer = new THREE.WebGLRenderer()
       renderer.setSize(window.innerWidth, window.innerHeight)
-      document.body.appendChild(renderer.domElement)
-
-      let control = new OrbitControls(camera)
+      let canvas = renderer.domElement
+      canvas.id = "canvas"
+      document.getElementById('threejs').replaceWith(canvas)
+      new OrbitControls(camera, document.getElementById('canvas'))
       this.createGrid()
 
-      var animate = function () {
+      let animate = function () {
         requestAnimationFrame(animate)
         renderer.render(this.scene, camera)
       }.bind(this)
@@ -225,23 +225,30 @@
 </script>
 
 <style>
-    body {
-        margin: 0;
-    }
+  html {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-    .menu--content {
-        z-index: 1;
-        background: #2e2e2e;
-        width: 310px;
-        position: fixed;
-        height: 100%;
-        display: flex;
-        transition: transform 0.2s ease-out;
-    }
+  #canvas {
+    z-index: 0;
+    position: relative;
+  }
 
-    .closed {
-        transform: translate(-310px);
-    }
+  .menu--content {
+    z-index: 1;
+    background: #2e2e2e;
+    width: 320px;
+    position: fixed;
+    height: 100%;
+    display: flex;
+    transition: transform 0.2s ease-out;
+  }
+
+  .closed {
+    transform: translate(-320px);
+  }
 
     .menu--button {
         z-index: 2;
@@ -256,14 +263,14 @@
         display: flex;
     }
 
-    .height {
-        height: 0;
-    }
+  .height {
+    height: 0;
+  }
 
-    .margin {
-        margin: 0;
-        padding: 0;
-    }
+  .margin {
+    margin: 0;
+    padding: 0;
+  }
 
     .list--element {
         width: 100%;
@@ -281,29 +288,29 @@
         margin-top: 30px;
     }
 
-    .background--color {
-        background: #2e2e2e !important;
-    }
+  .background--color {
+    background: #2e2e2e !important;
+  }
 
-    .mode--switch {
-        justify-content: center;
-        padding-top: 20px;
-    }
+  .mode--switch {
+    justify-content: center;
+    padding-top: 20px;
+  }
 
-    .advanced--inputs {
-        padding-right: 20px;
-        padding-left: 20px;
-    }
+  .advanced--inputs {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
 
-    .draw--button {
-        background: aqua;
-        margin-top: 20px;
-        width: 130px;
-        height: 50px;
-        justify-content: center;
-    }
+  .draw--button {
+    background: aqua;
+    margin-top: 20px;
+    width: 130px;
+    height: 50px;
+    justify-content: center;
+  }
 
-    .scroll {
-        overflow-y: auto;
-    }
+  .scroll {
+    overflow-y: auto;
+  }
 </style>
