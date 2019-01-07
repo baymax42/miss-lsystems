@@ -4,7 +4,7 @@
 %left '*' '/'
 %right '^'
 
-Start = Statement [':' Predicate] 'ARROW' {Body}
+Start = Statement [':' Check] 'ARROW' {Body}
                                             function (v, _, _, body) {
                                               this.create = new Function(
                                                 ...this.params,
@@ -29,48 +29,53 @@ Parameters = 'VAR' ',' Parameters
                                               this.params.push(param)
                                             };
 
-Predicate = Expression 'NEQ' Expression
+Check = Predicate 'AND' Predicate
                                             function (e1, _, e2) {
                                               this.check = new Function(
                                                 ...this.params,
-                                                `return ${e1} !== ${e2}`
+                                                `return ${e1} && ${e2}`
                                               )
+                                            }
+      | Predicate 'OR' Predicate
+                                            function (e1, _, e2) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1} || ${e2}`
+                                              )
+                                            }
+      | Predicate
+                                            function (e1) {
+                                              this.check = new Function(
+                                                ...this.params,
+                                                `return ${e1}`
+                                              )
+                                            };
+
+Predicate = Expression 'NEQ' Expression
+                                            function (e1, _, e2) {
+                                              return `${e1} !== ${e2}`
                                             }
           | Expression 'GTE' Expression
                                             function (e1, _, e2) {
-                                              this.check = new Function(
-                                                ...this.params,
-                                                `return ${e1} >= ${e2}`
-                                              )
+                                              return `${e1} >= ${e2}`
                                             }
           | Expression 'LTE' Expression
                                             function (e1, _, e2) {
-                                              this.check = new Function(
-                                                ...this.params,
-                                                `return ${e1} <= ${e2}`
-                                              )
+                                              return `${e1} <= ${e2}`
                                             }
+
           | Expression '>' Expression
                                             function (e1, _, e2) {
-                                              this.check = new Function(
-                                                ...this.params,
-                                                `return ${e1} > ${e2}`
-                                              )
+                                              return `${e1} > ${e2}`
                                             }
           | Expression '<' Expression
                                             function (e1, _, e2) {
-                                              this.check = new Function(
-                                                ...this.params,
-                                                `return ${e1} < ${e2}`
-                                              )
+                                              return `${e1} < ${e2}`
                                             }
 
           | Expression '=' Expression
                                             function (e1, _, e2) {
-                                              this.check = new Function(
-                                                ...this.params,
-                                                `return ${e1} === ${e2}`
-                                              )
+                                              return `${e1} === ${e2}`
                                             };
 
 

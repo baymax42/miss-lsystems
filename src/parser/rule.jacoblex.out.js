@@ -71,8 +71,8 @@ break;
 
 function CDFA_PREDICATE(){
 	this.ss=1;
-	this.as=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18];
-	this.tt=[null,14,15,14,14,15,15,15,9,15,15,7,13,10,8,null,9,12,11];
+	this.as=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22];
+	this.tt=[null,16,17,16,16,17,17,17,17,9,17,17,7,17,13,14,10,8,null,9,12,11,15];
 this.stt={};
 }
 CDFA_PREDICATE.prototype= new CDFA_base();
@@ -80,7 +80,7 @@ CDFA_PREDICATE.prototype.nextState = function(state, c){
     var next = 0;
     switch(state){
 case 1:
-if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || "!" < c)  && (c < "-" || "." < c)  && (c < "0" || "9" < c)  && (c < "<" || "<" < c)  && (c < ">" || ">" < c)  && (c < "a" || "z" < c)  && (c < " " || " " < c) ){
+if((c < "\t" || "\n" < c)  && (c < "\r" || "\r" < c)  && (c < " " || "!" < c)  && (c < "&" || "&" < c)  && (c < "-" || "." < c)  && (c < "0" || "9" < c)  && (c < "<" || "<" < c)  && (c < ">" || ">" < c)  && (c < "a" || "z" < c)  && (c < "|" || "|" < c)  && (c < " " || " " < c) ){
 next = 2;
 } else if(("\t" === c ) || (" " === c ) || (" " === c )){
 next = 3;
@@ -88,18 +88,22 @@ next = 3;
 next = 3;
 } else if(("!" === c )){
 next = 5;
-} else if(("-" === c )){
+} else if(("&" === c )){
 next = 6;
-} else if(("." === c )){
+} else if(("-" === c )){
 next = 7;
-} else if(("0" <= c && c <= "9") ){
+} else if(("." === c )){
 next = 8;
-} else if(("<" === c )){
+} else if(("0" <= c && c <= "9") ){
 next = 9;
-} else if((">" === c )){
+} else if(("<" === c )){
 next = 10;
-} else if(("a" <= c && c <= "z") ){
+} else if((">" === c )){
 next = 11;
+} else if(("a" <= c && c <= "z") ){
+next = 12;
+} else if(("|" === c )){
+next = 13;
 }
 break;
 case 3:
@@ -109,44 +113,54 @@ next = 3;
 break;
 case 5:
 if(("=" === c )){
-next = 12;
-}
-break;
-case 6:
-if((">" === c )){
-next = 13;
-}
-break;
-case 7:
-if(("0" <= c && c <= "9") ){
 next = 14;
 }
 break;
-case 8:
-if(("." === c )){
+case 6:
+if(("&" === c )){
 next = 15;
-} else if(("0" <= c && c <= "9") ){
-next = 8;
+}
+break;
+case 7:
+if((">" === c )){
+next = 16;
+}
+break;
+case 8:
+if(("0" <= c && c <= "9") ){
+next = 17;
 }
 break;
 case 9:
-if(("=" === c )){
-next = 17;
+if(("." === c )){
+next = 18;
+} else if(("0" <= c && c <= "9") ){
+next = 9;
 }
 break;
 case 10:
 if(("=" === c )){
-next = 18;
+next = 20;
 }
 break;
-case 14:
-if(("0" <= c && c <= "9") ){
-next = 14;
+case 11:
+if(("=" === c )){
+next = 21;
 }
 break;
-case 15:
+case 13:
+if(("|" === c )){
+next = 22;
+}
+break;
+case 17:
 if(("0" <= c && c <= "9") ){
-next = 14;
+next = 17;
+}
+break;
+case 18:
+if(("0" <= c && c <= "9") ){
+next = 17;
 }
 break;
 	}
@@ -156,7 +170,7 @@ break;
 function CDFA_BODY(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6];
-	this.tt=[null,18,19,18,18,17,16];
+	this.tt=[null,20,21,20,20,19,18];
 this.stt={};
 }
 CDFA_BODY.prototype= new CDFA_base();
@@ -188,7 +202,7 @@ break;
 function CDFA_EXPR(){
 	this.ss=1;
 	this.as=[1,2,3,4,5,6,7,8,9,10,12];
-	this.tt=[null,25,26,25,25,20,21,26,24,22,23,null,24];
+	this.tt=[null,27,28,27,27,22,23,28,26,24,25,null,26];
 this.stt={};
 }
 CDFA_EXPR.prototype= new CDFA_base();
@@ -313,6 +327,12 @@ this.actions = [function anonymous(
 },function anonymous(
 ) {
  return 'NEQ' 
+},function anonymous(
+) {
+ return 'AND' 
+},function anonymous(
+) {
+ return 'OR' 
 },function anonymous(
 ) {
  

@@ -6,8 +6,6 @@ var = [a-z]
 token = [A-Z\+f/&\[\]]
 digits = [0-9]
 
-operators = [\+\-\*\/\^]
-
 %%
 
 <>-> {
@@ -55,6 +53,10 @@ operators = [\+\-\*\/\^]
 <PREDICATE><= { return 'LTE' }
 
 <PREDICATE>!= { return 'NEQ' }
+
+<PREDICATE>&& { return 'AND' }
+
+<PREDICATE>\|\| { return 'OR' }
 
 <PREDICATE>\s*  { }
 

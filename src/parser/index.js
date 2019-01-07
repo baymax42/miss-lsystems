@@ -62,7 +62,6 @@ function transformRules (rules) {
     parserContext[result[0]].push(result[1])
   }
   parserContext.assemble = (array) => array.join('')
-  window.tmp = parserContext
   return parserContext
 }
 
@@ -78,7 +77,6 @@ function iterateSystem (system, parserContext) {
 function evolve (axiom, transformedRules, iterations) {
   let system = axiom
   while (iterations-- > 0) {
-    console.log(system)
     system = iterateSystem(system, transformedRules)
   }
   return iterateSystem(system, conversion.conversionContext(transformedRules))
