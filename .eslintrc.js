@@ -21,8 +21,12 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'indent': ['error', 2, {
+      'SwitchCase': 1
+    }],
     'vue/script-indent': ['error', 2, {
       'baseIndent': 1,
+      'switchCase': 1
     }],
     // allow async-await
     'generator-star-spacing': 'off',
